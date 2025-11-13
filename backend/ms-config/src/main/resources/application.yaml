@@ -1,0 +1,21 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: ms-config
+
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/eadarak00/gestion-alumni-config
+          clone-on-start: true
+          default-label: main
+          force-pull: true
+          search-paths: .
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
