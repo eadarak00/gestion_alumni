@@ -2,12 +2,14 @@ package uasz.alumni.ms_discover;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 @SpringBootApplication
+@EnableEurekaServer
 public class MsDiscoverApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MsDiscoverApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MsDiscoverApplication.class, args);
+    }
 
 }
