@@ -4,29 +4,26 @@ server:
 spring:
   application:
     name: ms-config
+
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/eadarak00/gestion-alumni-config
-          default-label: main       # branche par défaut
-          clone-on-start: true      # télécharge les configs au démarrage
-          force-pull: true          # s'assure d'avoir la dernière version
-          timeout: 10               # timeout de connexion en secondes
-          search-paths: .           # cherche les fichiers à la racine du repo
+          uri: https://github.com/eadarak00/gestion-alumni-config   # URL du dépôt distant
+          default-label: main                                        # branche par défaut
+          clone-on-start: true                                       # clone au démarrage
+          force-pull: true                                           # récupère les dernières modifs
+          timeout: 10
 
 management:
   endpoints:
     web:
       exposure:
         include: health,info,metrics,refresh
-  endpoint:
-    health:
-      show-details: always
 
 logging:
   level:
     "[org.springframework.cloud.config]": INFO
-    "[uasz.alumni.ms_config]": DEBUG
+    "[uasz.alumni]": DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
