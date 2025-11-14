@@ -1,0 +1,8 @@
+# docker-compose.yaml
+services:
+  ms-config:
+    build: ./backend/ms-config
+    container_name: ms-config
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
