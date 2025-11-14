@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: Utilisateur Service API
+  version: 1.0.0
+  description: API de gestion des utilisateurs, inscriptions et validation par code OTP
+
+servers:
+  - url: http://localhost:8081/api/auth
+
+paths:
+
+  /inscription:
+    post:
+      tags:
+        - Authentification
+      summary: Inscription d'un utilisateur (Étudiant ou Alumni)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/AlumniRegister'
+                - $ref: '#/components/schemas/EtudiantRegister'
+      responses:
+        '201':
+          description: Utilisateur créé - Code envoyé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Utilisateur'
+        '400':
+          description: Données invalides
+
+  /validation-code:
+    post:
+      tags:
+        - Authentification
+      summary: Validation du code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Compte activé
+        '400':
+          description: Code invalide ou expiré
+
+  /connexion:
+    post:
+      tags:
+        - Authentification
+      summary: Connexion d'un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Connexion réussie
+        '401':
+          description: Identifiants invalides
+
+  /roles:
+    get:
+      tags:
+        - Rôles
+      summary: Liste des rôles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+    post:
+      tags:
+        - Rôles
+      summary: Ajouter un rôle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '201':
+          description: Créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+
+components:
+  schemas:
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        libelle:
+          type: string
+          example: ALUMNI
+
+    Utilisateur:
+      type: object
+      required:
+        - nom
+        - prenom
+        - email
+        - telephone
+        - password
+        - username
+        - sexe
+        - dateNaissance
+        - role
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+        prenom:
+          type: string
+        email:
+          type: string
+        telephone:
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+        sexe:
+          type: string
+          enum: [M, F]
+        dateNaissance:
+          type: string
+          format: date
+        role:
+          $ref: '#/components/schemas/Role'
+        actif:
+          type: boolean
+          example: false
+        codeValidation:
+          type: string
+          example: "482915"
+        codeExpiration:
+          type: boolean
+          example: "true"
+
+    AlumniRegister:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Utilisateur'
+        - type: object
+          properties:
+            promotion:
+              type: string
+            entreprise:
+              type: string
+            poste:
+              type: string
+
+    EtudiantRegister:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Utilisateur'
+        - type: object
+          properties:
+            numeroEtudiant:
+              type: string
+            filiere:
+              type: string
+            niveau:
+              type: string
