@@ -16,7 +16,7 @@ FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
 # Copier le JAR final en le renommant en app.jar
-COPY --from=build /app/target/ms-config-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 # Exposer le port du Config Server
 EXPOSE 8888
