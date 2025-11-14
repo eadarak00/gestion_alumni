@@ -1,8 +1,21 @@
 # docker-compose.yaml
 services:
+
+  # service pour le microservice(ms-config)
   ms-config:
     build: ./backend/ms-config
     container_name: ms-config
     ports:
       - "8888:8888"
     restart: unless-stopped
+
+  # service pour le microservice(ms-config)
+  ms-discover:
+    build: ./backend/ms-discover
+    container_name: ms-discover
+    ports:
+      - "8761:8761"
+    depends_on:
+      - ms-config
+    restart: unless-stopped
+
