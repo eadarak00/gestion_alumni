@@ -18,4 +18,16 @@ services:
     depends_on:
       - ms-config
     restart: unless-stopped
+  
+  # service pour le microservice(ms-gateway)
+  ms-gateway:
+    build: ./backend/ms-gateway
+    container_name: ms-gateway
+    ports:
+      - "8088:8088"
+    depends_on:
+      - ms-config
+      - ms-discover
+    restart: unless-stopped
+
 
