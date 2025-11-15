@@ -1,3 +1,16 @@
+server:
+  port: 0   # Laissez Spring choisir un port aléatoire (bonne pratique microservices)
+
 spring:
   application:
     name: ms-user
+
+  config:
+    import:  "configserver:http://ms-config:8888" 
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://ms-discover:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
