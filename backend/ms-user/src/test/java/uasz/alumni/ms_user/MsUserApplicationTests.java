@@ -1,13 +1,13 @@
-package org.openapitools;
+package uasz.alumni.ms_user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OpenApiGeneratorApplicationTests {
+class MsUserApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
