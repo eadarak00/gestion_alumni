@@ -10,14 +10,14 @@
 * [ ] Creation de la classe Role
 * [ ] Mettre en place le Repository de la classe Role
 * [ ] Service de la classe Role
-* [ ] Controller de la classe Role `api/roles`
+* [ ] Controller de la classe Role `api/v1/roles`
 
 ### Safy – Backend / ms-user
 
 * [ ] Creation de la classe Utilisateur
 * [ ] Mettre en place le Repository de la classe Utilisateur
 * [ ] Service de la classe Utilisateur
-* [ ] Endpoint pour lister tous les utilisateur `api/utilisateurs`
+* [ ] Endpoint pour lister tous les utilisateur `api/v1/utilisateurs`
 
 > **Note** : `utiliser les dtos pour la creation d'un utilisateur et pour les lister`.
 
@@ -32,7 +32,7 @@
 * [ ] Creation de la classe Alumni
 * [ ] Mettre en place le Repository de la classe Alumni
 * [ ] Service de la classe Alumni - logique metier de la creation du compte
-* [ ] Endpoint pour inscrire un alumni `api/auth/inscription-alumni`
+* [ ] Endpoint pour inscrire un alumni `api/v1/auth/inscription-alumni`
 
 > **Note** : `utiliser les dtos pour l'inscription d'un alumni`.
 
@@ -41,16 +41,16 @@
 * [ ] Creation de la classe Etudiant
 * [ ] Mettre en place le Repository de la classe Etudiant
 * [ ] Service de la classe Etudiant - logique metier de la creation du compte
-* [ ] Endpoint pour inscrire un Etudiant `api/auth/inscription-etudiant`
+* [ ] Endpoint pour inscrire un Etudiant `api/v1/auth/inscription-etudiant`
 
 > **Note** : `utiliser les dtos pour l'inscription d'un etudiant`.
 
 
 ### Dieydy DEMBELE – Backend / ms-user
 
-* [ ] Endpoint pour la validation du mail `api/auth/valider-code`
+* [ ] Endpoint pour la validation du mail `api/v1/auth/valider-code`
 * [ ] Logique metier pour le renvoi du code de validation 
-* [ ] Endpoint pour la validation du mail `api/auth/renvoyer-code`
+* [ ] Endpoint pour la validation du mail `api/v1/auth/renvoyer-code`
 
 ### Abdourahmane DIALLO – Backend / ms-user
 * [ ] Mise en place de la securite de l'application `securityfilterchain`
