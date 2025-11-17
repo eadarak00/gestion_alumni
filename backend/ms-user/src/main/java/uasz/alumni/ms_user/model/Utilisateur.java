@@ -9,8 +9,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+
 
 
 @NoArgsConstructor                                      //un constructeur sans argument
@@ -27,8 +26,6 @@ public class Utilisateur extends BaseEntity  {
     private String username;
     private String motDePasse;
     private String telephone;
-    // Relation vers Role
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    private Boolean actif;
+    
 }

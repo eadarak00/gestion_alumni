@@ -20,6 +20,6 @@ public class UtilisateurController {
 
     @GetMapping("/actifs")
     public List<Utilisateur> getUtilisateursActifs() {
-        return utilisateurService.getUtilisateursActifsNonSupprimes();
+        return utilisateurService.getUtilisateursNonSupprimes();
     }
 }

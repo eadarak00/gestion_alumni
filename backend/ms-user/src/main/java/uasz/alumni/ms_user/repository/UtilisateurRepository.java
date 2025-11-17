@@ -7,6 +7,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
-    List<Utilisateur> findByActifTrueAndDeletedFalse();
+    List<Utilisateur> findByDeletedFalse();
    
 }
