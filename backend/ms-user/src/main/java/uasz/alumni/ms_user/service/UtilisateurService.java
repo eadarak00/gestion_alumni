@@ -15,4 +15,8 @@ public class UtilisateurService {
     public List<Utilisateur> getAllUtilisateurs() {
         return utilisateurRepository.findAll();
     }
+
+    public List<Utilisateur> getUtilisateursActifsNonSupprimes() {
+        return utilisateurRepository.findByActifTrueAndDeletedFalse();
+    }
 }

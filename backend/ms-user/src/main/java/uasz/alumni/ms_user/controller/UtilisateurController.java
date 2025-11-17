@@ -17,4 +17,9 @@ public class UtilisateurController {
     public List<Utilisateur> getAll() {
         return utilisateurService.getAllUtilisateurs();
     }
+
+    @GetMapping("/actifs")
+    public List<Utilisateur> getUtilisateursActifs() {
+        return utilisateurService.getUtilisateursActifsNonSupprimes();
+    }
 }

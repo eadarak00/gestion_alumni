@@ -27,10 +27,6 @@ public class Utilisateur extends BaseEntity  {
     private String username;
     private String motDePasse;
     private String telephone;
-    private String sexe;
-    private boolean actif;
-    private String adresse;
-    private String codeValidation;
     // Relation vers Role
     @ManyToOne
     @JoinColumn(name = "role_id")
