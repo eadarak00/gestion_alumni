@@ -2,7 +2,6 @@ package uasz.alumni.ms_user.repository;
 
 import uasz.alumni.ms_user.model.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
    

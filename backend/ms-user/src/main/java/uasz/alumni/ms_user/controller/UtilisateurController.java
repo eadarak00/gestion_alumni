@@ -1,18 +1,20 @@
 package uasz.alumni.ms_user.controller;
 
-
-import uasz.alumni.ms_user.service.UtilisateurService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import uasz.alumni.ms_user.service.UtilisateurService;
+import uasz.alumni.ms_user.model.Utilisateur;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/utilisateurs")
+@RequiredArgsConstructor
 public class UtilisateurController {
 
-    private UtilisateurService utilisateurService;
+    private final UtilisateurService utilisateurService;
 
-    public UtilisateurController(UtilisateurService utilisateurService) {
-        this.utilisateurService = utilisateurService;
+    @GetMapping
+    public List<Utilisateur> getAll() {
+        return utilisateurService.getAllUtilisateurs();
     }
-
-  
 }
