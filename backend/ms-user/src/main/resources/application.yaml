@@ -1,0 +1,14 @@
+server:
+  port: 8081  
+
+spring:
+  application:
+    name: ms-user
+
+  config:
+    import:  "configserver:http://ms-config:8888" 
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://ms-discover:8761/eureka
