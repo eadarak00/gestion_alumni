@@ -80,7 +80,7 @@
 
 ###  El abdou DRAME 
 * [x] Mise en place de l'entite de base
-* [ ] Creation du projet frontend
+* [x] Creation du projet frontend
 * [ ] Conteneurisation le frontend
 * [ ] Integration des parties
 
