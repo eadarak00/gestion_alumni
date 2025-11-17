@@ -81,8 +81,8 @@
 ###  El abdou DRAME 
 * [x] Mise en place de l'entite de base
 * [x] Creation du projet frontend
-* [ ] Conteneurisation le frontend
-* [ ] Integration des parties
+* [x] Conteneurisation le frontend
+* [x] Integration des parties
 
 
 > **Note G1** : `On utilisera la suppression logique dans le projet et non pas la suppression definitive`.
