@@ -1,4 +1,4 @@
-package uasz.alumni.ms_user.entity;
+package uasz.alumni.ms_user.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

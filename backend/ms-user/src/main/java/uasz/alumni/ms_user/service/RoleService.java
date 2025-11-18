@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import uasz.alumni.ms_user.entity.Role;
+import uasz.alumni.ms_user.model.Role;
 import uasz.alumni.ms_user.repository.RoleRepository;
 
 @Service

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 
-import uasz.alumni.ms_user.entity.Role;
+import uasz.alumni.ms_user.model.Role;
 import uasz.alumni.ms_user.service.RoleService;
 
 import java.util.List;
