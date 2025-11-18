@@ -24,7 +24,7 @@ class PasswordEncoderTest {
         String hashed = encoder.encode(raw + pepper);
 
         assertNotNull(hashed);
-        assertTrue(hashed.length() > 0);
+        assertFalse(hashed.isEmpty());
 
         // should match
         assertTrue(encoder.matches(raw + pepper, hashed));
