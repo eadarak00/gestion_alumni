@@ -1,4 +1,4 @@
-package uasz.alumni.ms_user.controller;
+package controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
