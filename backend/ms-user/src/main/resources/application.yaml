@@ -1,14 +1,31 @@
 server:
-  port: 8081  
+  port: 8081
 
 spring:
   application:
     name: ms-user
 
   config:
-    import:  "configserver:http://ms-config:8888" 
+    # If config server is not available (local development/tests), do not fail-fast
+    import: "optional:configserver:http://ms-config:8888"
 
+  # --- Flyway migration (pour exécuter V1__create_users_table.sql) ---
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+# ===============================
+# Eureka Discovery Client
+# ===============================
 eureka:
   client:
     service-url:
       defaultZone: http://ms-discover:8761/eureka
+
+# ===============================
+# Custom App Security Variables
+# ===============================
+app:
+  jwt-secret: ${JWT_SECRET:default_secret_please_change_me}
+  jwt-expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+  pepper: ${APP_PEPPER:}

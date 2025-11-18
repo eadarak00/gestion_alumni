@@ -1,12 +1,15 @@
 package uasz.alumni.ms_user.repository;
 
-import uasz.alumni.ms_user.model.Utilisateur;
-
-import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
+import uasz.alumni.ms_user.entity.Utilisateur;
+
+import java.util.Optional;
 
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
-    List<Utilisateur> findByDeletedFalse();
-   
+
+    Optional<Utilisateur> findByEmail(String email);
+
+    Optional<Utilisateur> findByResetToken(String token);
+
+    boolean existsByEmail(String email);
 }

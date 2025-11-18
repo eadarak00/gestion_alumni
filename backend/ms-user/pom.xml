@@ -108,6 +108,25 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+		        <!-- Argon2 Password Hashing -->
+				<dependency>
+					<groupId>de.mkammerer</groupId>
+					<artifactId>argon2-jvm</artifactId>
+					<version>2.11</version>
+				</dependency>
+		
+				<!-- Flyway Migration -->
+				<dependency>
+					<groupId>org.flywaydb</groupId>
+					<artifactId>flyway-core</artifactId>
+				</dependency>
+		
+				<!-- Mail Service (reset password) -->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-mail</artifactId>
+				</dependency>
+				
 
 	</dependencies>
 	<dependencyManagement>
