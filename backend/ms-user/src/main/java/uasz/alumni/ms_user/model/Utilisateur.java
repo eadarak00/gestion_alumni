@@ -7,8 +7,13 @@ import uasz.alumni.ms_user.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 
 
@@ -22,10 +27,25 @@ public class Utilisateur extends BaseEntity  {
  
     private String nom;
     private String prenom;
+
+    @Column(unique = true, nullable = false)
+    @Email(message = "Email invalide")
+    @NotBlank(message = "L'email est obligatoire")
     private String email;
-    private String username;
+
+    @Column(nullable = false)
     private String motDePasse;
+
+    @jakarta.validation.constraints.Pattern(regexp = "^(\\+221|00221)?[7][05678]\\d{7}$", message = "Numéro de téléphone invalide (format Sénégal)")
     private String telephone;
+   
+
+    private String username;
+   
     private Boolean actif;
+
+   @ManyToOne
+   @JoinColumn(name = "role_id")
+    private Role role;
     
 }
