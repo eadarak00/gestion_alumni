@@ -1,20 +1,19 @@
 package uasz.alumni.ms_user.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;  
 import jakarta.persistence.GenerationType;
 
 @Entity
-@Table(name = "roles")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Getter
+@Setter
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
