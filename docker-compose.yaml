@@ -87,8 +87,6 @@ services:
     networks:
       - microservices-net
     depends_on:
-      ms-config:
-        condition: service_healthy
       ms-discover:
         condition: service_healthy
       ms-user-db:
@@ -98,7 +96,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8081/actuator/health"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 40s
   
   # FRONTEND REACT + VITE 
   frontend:

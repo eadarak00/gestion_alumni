@@ -60,7 +60,7 @@ public class SecurityConfig {
                 // ********* 3. Gestion des autorisations (RBAC) *************
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/auth/**",
+                                "/api/v1/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
