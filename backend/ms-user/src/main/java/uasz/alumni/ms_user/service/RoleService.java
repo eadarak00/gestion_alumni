@@ -25,9 +25,6 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper;
 
-    // Self-injection pour l’appel transactionnel correct
-    private final RoleService self;
-
     /**
      * Creation du role 
      * @param dto 
@@ -46,7 +43,7 @@ public class RoleService {
      */
     public RoleResponseDTO updateRole(@NonNull Long id, @NonNull RoleRequestDTO dto) {
         Role role = Objects.requireNonNull(
-                self.getRoleById(id),
+                this.getRoleById(id),
                 "Le rôle recupéré depuis le DTO ne doit pas être null");
         roleMapper.updateEntity(role, dto);
         Role updated = roleRepository.save(role);
@@ -67,7 +64,7 @@ public class RoleService {
      */
     @Transactional(readOnly = true)
     public RoleResponseDTO getRoleDtoById(@NonNull Long id) {
-        return roleMapper.toResponse(self.getRoleById(id));
+        return roleMapper.toResponse(this.getRoleById(id));
     }
 
     /**
@@ -85,7 +82,7 @@ public class RoleService {
      * SOFT DELETE
      */
     public void softDeleteRole(@NonNull Long id) {
-        Role role = self.getRoleById(id);
+        Role role = this.getRoleById(id);
         role.softDelete();
         roleRepository.save(role);
     }
