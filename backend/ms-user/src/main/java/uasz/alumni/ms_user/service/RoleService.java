@@ -20,7 +20,7 @@ public class RoleService {
     }
 
     // Récupérer un rôle par son ID
-    public Optional<Role> getRoleById(Integer id) {
+    public Optional<Role> getRoleById(long id) {
         return roleRepository.findById(id);
     }
 
@@ -30,7 +30,7 @@ public class RoleService {
     }
 
     // Supprimer un rôle par son ID
-    public void deleteRoleById(Integer id) {
+    public void deleteRoleById(long id) {
         roleRepository.deleteById(id);
     }
 }
