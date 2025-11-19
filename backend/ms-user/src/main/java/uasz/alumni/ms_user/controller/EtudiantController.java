@@ -47,24 +47,24 @@ public class EtudiantController {
             responseCode = "201",
             description = "Étudiant inscrit avec succès",
             content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = EtudiantResponseDTO.class)
+                mediaType = "application/json"
+                // schema = @Schema(implementation = EtudiantResponseDTO.class)
             )
         ),
         @ApiResponse(
             responseCode = "400",
             description = "Données de requête invalides",
             content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class)
+                mediaType = "application/json"
+                // schema = @Schema(implementation = ErrorResponse.class)
             )
         ),
         @ApiResponse(
             responseCode = "409",
             description = "Conflit - Numéro de carte étudiant ou email déjà existant",
             content = @Content(
-                mediaType = "application/json",
-                schema = @Schema(implementation = ErrorResponse.class)
+                mediaType = "application/json"
+                // schema = @Schema(implementation = ErrorResponse.class)
             )
         )
     })
