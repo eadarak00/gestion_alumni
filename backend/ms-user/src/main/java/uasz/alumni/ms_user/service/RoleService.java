@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import uasz.alumni.ms_user.model.Role;
 import uasz.alumni.ms_user.repository.RoleRepository;
@@ -15,7 +17,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
 
     // Créer ou mettre à jour un rôle
-    public Role saveRole(Role role) {
+    public Role saveRole(@NonNull Role role) {
         return roleRepository.save(role);
     }
 
