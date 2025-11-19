@@ -3,7 +3,6 @@ package uasz.alumni.ms_user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uasz.alumni.ms_user.dto.EtudiantInscriptionDTO;
 import uasz.alumni.ms_user.dto.EtudiantRequestDTO;
 import uasz.alumni.ms_user.dto.EtudiantResponseDTO;
 import uasz.alumni.ms_user.mapper.EtudiantMapper;
@@ -12,8 +11,8 @@ import uasz.alumni.ms_user.model.Role;
 import uasz.alumni.ms_user.repository.EtudiantRepository;
 import uasz.alumni.ms_user.repository.RoleRepository;
 import uasz.alumni.ms_user.common.exception.ResourceAlreadyExistsException;
+import uasz.alumni.ms_user.common.exception.ResourceNotFoundException;
 
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
