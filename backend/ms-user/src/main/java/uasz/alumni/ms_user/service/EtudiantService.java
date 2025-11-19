@@ -1,58 +1,50 @@
 package uasz.alumni.ms_user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;  
-import uasz.alumni.ms_user.dto.EtudiantInscriptionDTO;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uasz.alumni.ms_user.dto.EtudiantRequestDTO;
+import uasz.alumni.ms_user.dto.EtudiantResponseDTO;
+import uasz.alumni.ms_user.mapper.EtudiantMapper;
 import uasz.alumni.ms_user.model.Etudiant;
 import uasz.alumni.ms_user.model.Role;
 import uasz.alumni.ms_user.repository.EtudiantRepository;
 import uasz.alumni.ms_user.repository.RoleRepository;
+import uasz.alumni.ms_user.common.exception.ResourceAlreadyExistsException;
+import uasz.alumni.ms_user.common.exception.ResourceNotFoundException;
+
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EtudiantService {
 
     private final EtudiantRepository etudiantRepository;
     private final RoleRepository roleRepository;
-    // Inscrit un nouvel étudiant avec vérifications d'unicité
-    public Etudiant inscrireEtudiant(EtudiantInscriptionDTO dto) {
-        // Vérifie si l'email est déjà utilisé
+    private final EtudiantMapper etudiantMapper;
+
+    public EtudiantResponseDTO inscrireEtudiant(EtudiantRequestDTO dto) {
+
+        // Vérifications d'unicité
         if (etudiantRepository.findByEmail(dto.getEmail()).isPresent())
-            throw new RuntimeException("Email déjà utilisé");
+            throw new ResourceAlreadyExistsException("Email déjà utilisé");
 
-        // Vérifie si le username est déjà utilisé
         if (etudiantRepository.findByUsername(dto.getUsername()).isPresent())
-            throw new RuntimeException("Username déjà utilisé");
+            throw new ResourceAlreadyExistsException("Username déjà utilisé");
 
-        // Vérifie si le numéro de carte est déjà utilisé
         if (etudiantRepository.findByNumeroCarteEtudiant(dto.getNumeroCarteEtudiant()).isPresent())
-            throw new RuntimeException("Numéro de carte déjà utilisé");
+            throw new ResourceAlreadyExistsException("Numéro de carte déjà utilisé");
 
-        // Crée et sauvegarde l'étudiant
-
-
-
-          // On récupère automatiquement le rôle ETUDIANT
+        // Récupération du rôle ETUDIANT
         Role roleEtudiant = roleRepository.findByLibelle("ETUDIANT")
-                .orElseThrow(() -> new RuntimeException("Le rôle ETUDIANT n'existe pas"));
+                .orElseThrow(() -> new ResourceNotFoundException("Le rôle ETUDIANT n'existe pas"));
 
-        // Création de l'étudiant
-        Etudiant etudiant = new Etudiant();
-        etudiant.setNom(dto.getNom());
-        etudiant.setPrenom(dto.getPrenom());
-        etudiant.setEmail(dto.getEmail());
-        etudiant.setUsername(dto.getUsername());
-        etudiant.setMotDePasse(dto.getMotDePasse());
-        etudiant.setTelephone(dto.getTelephone());
-        etudiant.setNumeroCarteEtudiant(dto.getNumeroCarteEtudiant());
-        etudiant.setNiveau(dto.getNiveau());
-        etudiant.setFiliere(dto.getFiliere());
-        etudiant.setActif(true);
-
-        // Affectation automatique du rôle
+        // Création de l'entité Etudiant
+        Etudiant etudiant = etudiantMapper.toEntity(dto);
         etudiant.setRole(roleEtudiant);
 
-         return etudiantRepository.save(etudiant);
-
+        // Sauvegarde et retour DTO
+        Etudiant saved = etudiantRepository.save(etudiant);
+        return etudiantMapper.toResponse(saved);
     }
 }
