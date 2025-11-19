@@ -7,6 +7,7 @@ import uasz.alumni.ms_user.service.UtilisateurService;
 import uasz.alumni.ms_user.dto.UtilisateurResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/utilisateurs")
 @RequiredArgsConstructor
+@Tag(name = "Utilisateurs", description = "API pour gérer les utilisateurs")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
