@@ -1,4 +1,4 @@
-package uasz.alumni.mapper;
+package uasz.alumni.ms_user.mapper;
 
 import org.springframework.stereotype.Component;
 
