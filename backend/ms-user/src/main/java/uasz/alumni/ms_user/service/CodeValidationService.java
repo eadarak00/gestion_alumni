@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
-import jakarta.persistence.EntityNotFoundException;
 import uasz.alumni.ms_user.common.exception.CodeEnvoiException;
 import uasz.alumni.ms_user.common.utils.EmailUtils;
 import uasz.alumni.ms_user.model.CodeValidation;
@@ -29,8 +28,9 @@ import java.util.List;
 public class CodeValidationService {
 
     private final CodeValidationRepository codeValidationRepository;
-    private final UtilisateurRepository utilisateurRepository;
     private final EmailService emailService;
+    private final UtilisateurService utilisateurService;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Value("${app.email.code-expiration-minutes:15}")
     private int codeExpirationMinutes;
@@ -50,11 +50,12 @@ public class CodeValidationService {
      * Crée et envoie un code OTP pour un utilisateur.
      */
     @Transactional
-    public void creerEtEnvoyerCode(Utilisateur utilisateur) {
+    public void creerEtEnvoyerCode(String email) {
 
         Instant now = Instant.now();
         Instant expiration = now.plus(codeExpirationMinutes, ChronoUnit.MINUTES);
         String code = genererCode();
+        Utilisateur utilisateur = utilisateurService.getUtilisateurByEmail(email);
 
         log.info("Génération d'un code pour {}", utilisateur.getEmail());
         // Récupérer le dernier code existant
@@ -100,8 +101,7 @@ public class CodeValidationService {
     @Transactional
     public boolean validerCode(String email, String code) {
 
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur introuvable"));
+        Utilisateur utilisateur = utilisateurService.getUtilisateurByEmail(email);
 
         Instant now = Instant.now();
 
