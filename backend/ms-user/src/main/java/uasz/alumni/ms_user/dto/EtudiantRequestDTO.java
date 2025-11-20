@@ -23,7 +23,6 @@ public class EtudiantRequestDTO {
     @NotBlank(message = "L'email est obligatoire")
     private String email;
 
-    @NotBlank(message = "Le username est obligatoire")
     private String username;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
