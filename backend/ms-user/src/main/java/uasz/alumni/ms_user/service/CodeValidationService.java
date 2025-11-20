@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.mail.MessagingException;
+import uasz.alumni.ms_user.common.utils.EmailUtils;
 import uasz.alumni.ms_user.model.CodeValidation;
 import uasz.alumni.ms_user.model.Utilisateur;
 import uasz.alumni.ms_user.repository.CodeValidationRepository;
@@ -57,9 +60,16 @@ public class CodeValidationService {
         
         // Envoyer l'email
         String nomComplet = utilisateur.getPrenom() + " " + utilisateur.getNom();
-        emailService.envoyerCodeValidation(utilisateur.getEmail(), nomComplet, code);
-        
-        log.info("Code de validation créé et envoyé à : {}", utilisateur.getEmail());
+        try {
+            emailService.envoyerHtml(
+                    utilisateur.getEmail(),
+                    EmailUtils.sujetValidationInscription(),
+                    EmailUtils.corpsValidationInscriptionHTML(nomComplet, code));
+            System.out.println("Email envoyé avec le code : " + code);
+        } catch (MessagingException e) {
+            System.err.println("Échec de l'envoi du mail à : " + utilisateur.getEmail());
+            e.printStackTrace();
+        }
     }
 
     /**
