@@ -7,17 +7,17 @@
 
 ### DAFFE – Backend / ms-user
 
-* [ ] Creation de la classe Role
-* [ ] Mettre en place le Repository de la classe Role
-* [ ] Service de la classe Role
-* [ ] Controller de la classe Role `api/v1/roles`
+* [x] Creation de la classe Role
+* [x] Mettre en place le Repository de la classe Role
+* [x] Service de la classe Role
+* [x] Controller de la classe Role `api/v1/roles`
 
 ### Safy – Backend / ms-user
 
-* [ ] Creation de la classe Utilisateur
-* [ ] Mettre en place le Repository de la classe Utilisateur
-* [ ] Service de la classe Utilisateur
-* [ ] Endpoint pour lister tous les utilisateur `api/v1/utilisateurs`
+* [x] Creation de la classe Utilisateur
+* [x] Mettre en place le Repository de la classe Utilisateur
+* [x] Service de la classe Utilisateur
+* [x] Endpoint pour lister tous les utilisateur `api/v1/utilisateurs`
 
 > **Note** : `utiliser les dtos pour la creation d'un utilisateur et pour les lister`.
 

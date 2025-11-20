@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AlumniService implements IAlumni {
+public class AlumniService{
 
     private final AlumniRepository repository;
     private final AlumniMapper mapper;
 
-    @Override
+    
     public AlumniResponse create(AlumniRequest request) {
          Alumni alumni = repository.findByEmail(request.getEmail());
          if(alumni!=null)
@@ -31,26 +31,5 @@ public class AlumniService implements IAlumni {
         return mapper.toResponse(repository.save(alumni));
     }
 
-    @Override
-    public List<AlumniResponse> getAll() {
-
-        return null;
-    }
-
-
-    @Override
-    public AlumniResponse getById(Long id) {
-
-        return null;
-    }
-
-    @Override
-    public AlumniResponse update(Long id, AlumniRequest request) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long id) {
-
-    }
+    
 }

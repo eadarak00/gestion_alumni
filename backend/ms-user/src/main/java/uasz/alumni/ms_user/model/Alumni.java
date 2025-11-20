@@ -13,17 +13,7 @@ import uasz.alumni.ms_user.common.entity.BaseEntity;
 @AllArgsConstructor
 @Builder
 @Data
-public class Alumni extends BaseEntity {
-
-    private String nom;
-    private String prenom;
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    private String telephone;
-
-    private String password;  // hashé dans le service
+public class Alumni extends Utilisateur {
     private String profession;
     private String entreprise;
 }
