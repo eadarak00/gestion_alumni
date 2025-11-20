@@ -1,51 +1,104 @@
 package uasz.alumni.ms_user.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import uasz.alumni.ms_user.common.entity.BaseEntity;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Column;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import uasz.alumni.ms_user.common.entity.BaseEntity;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type_utilisateur", discriminatorType = DiscriminatorType.STRING, length = 50)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Schema(description = "Entité représentant un utilisateur de la plateforme UASZ Alumni")
+public class Utilisateur extends BaseEntity {
 
-
-@NoArgsConstructor                                      //un constructeur sans argument
-@AllArgsConstructor                                     //un constructeur avec tous les arguments
-@Data                                                   //génère les getters et setters   
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)   //indique que les classes dérivées seront mappées dans une seule table de base de données
-@Entity                                                 //indique que cette classe est une entité JPA ,mappée à une table de base de données 
-@DiscriminatorColumn(name = "type_utilisateur",discriminatorType = DiscriminatorType.STRING) // Colonne pour distinguer Etudiant / Alumni
-public class Utilisateur extends BaseEntity  {
- 
+    @NotBlank(message = "Le nom est obligatoire")
+    @Schema(
+        description = "Nom de famille de l'utilisateur",
+        example = "DIOP",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        minLength = 1,
+        maxLength = 100
+    )
     private String nom;
+
+    @NotBlank(message = "Le prénom est obligatoire")
+    @Schema(
+        description = "Prénom de l'utilisateur",
+        example = "Marie",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        minLength = 1,
+        maxLength = 100
+    )
     private String prenom;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Email(message = "Email invalide")
     @NotBlank(message = "L'email est obligatoire")
+    @Schema(
+        description = "Adresse email unique de l'utilisateur",
+        example = "marie.diop@alumni-uaszi.sn",
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        pattern = "^[A-Za-z0-9+_.-]+@(.+)$"
+    )
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Le mot de passe est obligatoire")
+    @Schema(
+        description = "Mot de passe hashé de l'utilisateur",
+        example = "$2a$10$xyz123...",
+        accessMode = Schema.AccessMode.WRITE_ONLY,
+        requiredMode = Schema.RequiredMode.REQUIRED,
+        minLength = 6
+    )
     private String motDePasse;
 
-    @jakarta.validation.constraints.Pattern(regexp = "^(\\+221|00221)?[7][05678]\\d{7}$", message = "Numéro de téléphone invalide (format Sénégal)")
+    @Pattern(regexp = "^(\\+221|00221)?7[015678]\\d{7}$", message = "Numéro de téléphone invalide (format Sénégal)")
+    @Schema(
+        description = "Numéro de téléphone au format sénégalais",
+        example = "+221781234567",
+        pattern = "^(\\+221|00221)?7[015678]\\d{7}$"
+    )
     private String telephone;
-   
 
+    @Column(unique = true)
+    @Schema(
+        description = "Nom d'utilisateur unique pour la connexion",
+        example = "mariediop2024"
+    )
     private String username;
-   
+
+    @Column(nullable = false)
+    @Schema(
+        description = "Statut d'activation du compte utilisateur",
+        example = "true",
+        defaultValue = "true"
+    )
     private Boolean actif;
 
-   @ManyToOne
-   @JoinColumn(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    @Schema(
+        description = "Rôle associé à l'utilisateur",
+        implementation = Role.class
+    )
     private Role role;
-    
 }

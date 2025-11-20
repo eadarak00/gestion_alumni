@@ -12,3 +12,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://ms-discover:8761/eureka
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
