@@ -26,7 +26,6 @@ public class EtudiantService {
     private final EtudiantMapper etudiantMapper;
     private final PasswordEncoder passwordEncoder;
     private final CodeValidationService codeValidationService;
-    // private final CodeValidationService codeValidationService;
 
     public EtudiantResponseDTO inscrireEtudiant(EtudiantRequestDTO dto) {
 
@@ -54,7 +53,7 @@ public class EtudiantService {
 
         // Sauvegarde et retour DTO
         Etudiant saved = etudiantRepository.save(etudiant);
-        codeValidationService.creerEtEnvoyerCode(saved);
+        codeValidationService.creerEtEnvoyerCode(saved.getEmail());
         return etudiantMapper.toResponse(saved);
     }
 }
