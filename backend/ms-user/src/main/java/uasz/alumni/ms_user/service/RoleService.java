@@ -34,6 +34,7 @@ public class RoleService {
         Role role = Objects.requireNonNull(
                 roleMapper.toEntity(dto),
                 "Le rôle mappé depuis le DTO ne doit pas être null");
+        role.setLibelle(role.getLibelle().toUpperCase());
         Role saved = roleRepository.save(role);
         return roleMapper.toResponse(saved);
     }
@@ -96,4 +97,9 @@ public class RoleService {
         }
         roleRepository.deleteById(id);
     }
+
+    public boolean existsRoleParLibelle(String libelle) {
+        return roleRepository.findByLibelle(libelle).isPresent();
+    }
+
 }
