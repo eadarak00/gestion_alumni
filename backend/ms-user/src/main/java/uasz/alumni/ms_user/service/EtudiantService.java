@@ -25,6 +25,8 @@ public class EtudiantService {
     private final RoleRepository roleRepository;
     private final EtudiantMapper etudiantMapper;
     private final PasswordEncoder passwordEncoder;
+    private final CodeValidationService codeValidationService;
+    // private final CodeValidationService codeValidationService;
 
     public EtudiantResponseDTO inscrireEtudiant(EtudiantRequestDTO dto) {
 
@@ -46,11 +48,13 @@ public class EtudiantService {
         Etudiant etudiant = etudiantMapper.toEntity(dto);
         etudiant.setRole(roleEtudiant);
 
+
         // Hash du mot de passe
         etudiant.setMotDePasse(passwordEncoder.encode(etudiant.getMotDePasse()));
 
         // Sauvegarde et retour DTO
         Etudiant saved = etudiantRepository.save(etudiant);
+        codeValidationService.creerEtEnvoyerCode(saved);
         return etudiantMapper.toResponse(saved);
     }
 }
