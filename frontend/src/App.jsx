@@ -1,9 +1,12 @@
-import React from 'react'
+import { AuthProvider } from './contextes/ContexteAuth';
+import RoutesApp from './routes/RoutesApp';
 
-const App = () => {
+function App() {
   return (
-    <div >App</div>
-  )
+    <AuthProvider>
+      <RoutesApp />
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
