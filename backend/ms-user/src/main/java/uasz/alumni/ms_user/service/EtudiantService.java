@@ -1,6 +1,8 @@
 package uasz.alumni.ms_user.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uasz.alumni.ms_user.dto.EtudiantRequestDTO;
@@ -22,6 +24,7 @@ public class EtudiantService {
     private final EtudiantRepository etudiantRepository;
     private final RoleRepository roleRepository;
     private final EtudiantMapper etudiantMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public EtudiantResponseDTO inscrireEtudiant(EtudiantRequestDTO dto) {
 
@@ -42,6 +45,9 @@ public class EtudiantService {
         // Création de l'entité Etudiant
         Etudiant etudiant = etudiantMapper.toEntity(dto);
         etudiant.setRole(roleEtudiant);
+
+        // Hash du mot de passe
+        etudiant.setMotDePasse(passwordEncoder.encode(etudiant.getMotDePasse()));
 
         // Sauvegarde et retour DTO
         Etudiant saved = etudiantRepository.save(etudiant);
