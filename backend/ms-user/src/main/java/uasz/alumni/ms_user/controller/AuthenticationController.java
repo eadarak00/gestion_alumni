@@ -17,10 +17,10 @@ import uasz.alumni.ms_user.dto.EtudiantResponseDTO;
 import uasz.alumni.ms_user.service.EtudiantService;
 
 @RestController
-@RequestMapping("/api/v1/etudiants")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Étudiant", description = "Endpoints pour les étudiants")
-public class EtudiantController {
+@Tag(name = "Inscription Étudiant", description = "Endpoints pour l'inscription des étudiants")
+public class AuthenticationController {
 
     private final EtudiantService etudiantService;
 
@@ -33,5 +33,6 @@ public class EtudiantController {
                 .status(HttpStatus.CREATED)
                 .body(etudiantService.inscrireEtudiant(dto));
     }
+
 
 }

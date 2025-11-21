@@ -26,18 +26,16 @@ public class EmailService {
     @Value("${app.email.from}")
     private String fromEmail;
 
-    @Value("${mail.username}")
+    @Value("${spring.mail.username}")
     private String mailUsername;
 
     @PostConstruct
     private void init() {
-        Objects.requireNonNull(mailUsername, "La propriété mail.username ne doit pas être null");
+        Objects.requireNonNull(mailUsername, "La propriété spring.mail.username ne doit pas être null");
         Objects.requireNonNull(fromEmail, "La propriété app.email.from ne doit pas être null");
+        log.info("EmailService initialisé avec fromEmail={} et mailUsername={}", fromEmail, mailUsername);
     }
 
-    /**
-     * Envoie un email simple (texte brut)
-     */
     public void envoyerEmail(@NonNull String to, @NonNull String subject, @NonNull String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
@@ -49,19 +47,14 @@ public class EmailService {
         log.info("Email simple envoyé à {}", to);
     }
 
-    /**
-     * Envoie un email HTML
-     */
-    public void envoyerHtml(@NonNull String to, @NonNull String subject, @NonNull String htmlContent)
-            throws MessagingException {
+    public void envoyerHtml(String to, String subject, String htmlContent) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
         try {
-            helper.setFrom(new InternetAddress(Objects.requireNonNull(mailUsername, "La propriété mail.username ne doit pas être null"), "Gestion Alumni"));
+            helper.setFrom(new InternetAddress("djibyf573@gmail.com", "Service CampusLoc"));
         } catch (UnsupportedEncodingException e) {
-            log.warn("Impossible d’utiliser le nom, fallback sur l’adresse seule");
-            helper.setFrom(Objects.requireNonNull(mailUsername, "La propriété mail.username ne doit pas être null"));
+            helper.setFrom("djibyf573@gmail.com"); // fallback sans nom
         }
 
         helper.setTo(to);
@@ -69,6 +62,5 @@ public class EmailService {
         helper.setText(htmlContent, true);
 
         mailSender.send(mimeMessage);
-        log.info("Email HTML envoyé à {}", to);
     }
 }

@@ -77,7 +77,6 @@ services:
       - --wait-timeout=28800
       - --interactive-timeout=28800
 
-
   # MS-USER
   ms-user:
     build: ./backend/ms-user
@@ -117,8 +116,6 @@ services:
       timeout: 5s
       retries: 5
 
-
-
   # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -133,7 +130,6 @@ services:
     depends_on:
       - ms-user-db
     restart: unless-stopped
-
 
 networks:
   microservices-net:
