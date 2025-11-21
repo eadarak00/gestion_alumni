@@ -92,7 +92,7 @@ public class Utilisateur extends BaseEntity {
         example = "true",
         defaultValue = "true"
     )
-    private Boolean actif;
+    private Boolean actif = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)

@@ -20,7 +20,7 @@ public class EtudiantMapper {
         etudiant.setNumeroCarteEtudiant(dto.getNumeroCarteEtudiant());
         etudiant.setNiveau(dto.getNiveau());
         etudiant.setFiliere(dto.getFiliere());
-        etudiant.setActif(true);
+        etudiant.setActif(false);
         return etudiant;
     }
 

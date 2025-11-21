@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.mail.MessagingException;
+import uasz.alumni.ms_user.common.exception.CodeEnvoiException;
 import uasz.alumni.ms_user.common.utils.EmailUtils;
 import uasz.alumni.ms_user.model.CodeValidation;
 import uasz.alumni.ms_user.model.Utilisateur;
@@ -14,123 +15,135 @@ import uasz.alumni.ms_user.repository.CodeValidationRepository;
 import uasz.alumni.ms_user.repository.UtilisateurRepository;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.Objects;
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class CodeValidationService {
 
     private final CodeValidationRepository codeValidationRepository;
-    private final UtilisateurRepository utilisateurRepository;
     private final EmailService emailService;
+    private final UtilisateurService utilisateurService;
+    private final UtilisateurRepository utilisateurRepository;
 
     @Value("${app.email.code-expiration-minutes:15}")
     private int codeExpirationMinutes;
 
-    private static final SecureRandom random = new SecureRandom();
+    private static final SecureRandom RANDOM = new SecureRandom();
+
 
     /**
-     * Génère un code de validation à 6 chiffres
+     * Génère un code OTP sécurisé à 6 chiffres
      */
     private String genererCode() {
-        int code = 100000 + random.nextInt(900000);
-        return String.valueOf(code);
+        return String.format("%06d", RANDOM.nextInt(1_000_000));
     }
 
+
     /**
-     * Crée et envoie un code de validation pour un utilisateur
+     * Crée et envoie un code OTP pour un utilisateur.
      */
-    public void creerEtEnvoyerCode(Utilisateur utilisateur) {
-        // Générer le code
+    @Transactional
+    public void creerEtEnvoyerCode(String email) {
+
+        Instant now = Instant.now();
+        Instant expiration = now.plus(codeExpirationMinutes, ChronoUnit.MINUTES);
         String code = genererCode();
-        
-        // Créer l'entité CodeValidation
-        CodeValidation codeValidation = new CodeValidation();
-        codeValidation.setCode(code);
-        codeValidation.setUtilisateur(utilisateur);
-        codeValidation.setDateCreation(LocalDateTime.now());
-        codeValidation.setDateExpiration(LocalDateTime.now().plusMinutes(codeExpirationMinutes));
-        codeValidation.setUtilise(false);
-        
-        // Sauvegarder dans la base de données
-        codeValidationRepository.save(codeValidation);
-        
-        // Envoyer l'email
-        String nomComplet = utilisateur.getPrenom() + " " + utilisateur.getNom();
+        Utilisateur utilisateur = utilisateurService.getUtilisateurByEmail(email);
+
+        log.info("Génération d'un code pour {}", utilisateur.getEmail());
+        // Récupérer le dernier code existant
+        Optional<CodeValidation> existing = 
+                codeValidationRepository.findTopByUtilisateurOrderByDateCreationDesc(utilisateur);
+
+        CodeValidation validation = Objects.requireNonNull(existing
+                .map(cv -> {
+                    cv.setCode(code);
+                    cv.setDateExpiration(expiration);
+                    cv.setUtilise(false);
+                    return cv;
+                })
+                .orElseGet(() -> CodeValidation.builder()
+                        .code(code)
+                        .utilisateur(utilisateur)
+                        .dateCreation(now)
+                        .dateExpiration(expiration)
+                        .utilise(false)
+                        .build()
+                ));
+
+        codeValidationRepository.save(validation);
+
         try {
             emailService.envoyerHtml(
                     utilisateur.getEmail(),
                     EmailUtils.sujetValidationInscription(),
-                    EmailUtils.corpsValidationInscriptionHTML(nomComplet, code));
-            System.out.println("Email envoyé avec le code : " + code);
+                    EmailUtils.corpsValidationInscriptionHTML(utilisateur.getPrenom(), code)
+            );
+            log.info("Code envoyé à l'adresse : {}", utilisateur.getEmail());
+
         } catch (MessagingException e) {
-            System.err.println("Échec de l'envoi du mail à : " + utilisateur.getEmail());
-            e.printStackTrace();
+            log.error("Échec de l'envoi de l'email pour {}", utilisateur.getEmail(), e);
+            throw new CodeEnvoiException("Impossible d'envoyer le code de validation");
         }
     }
 
+
     /**
-     * Valide un code pour un utilisateur
+     * Valide un OTP envoyé à l'email d'un utilisateur
      */
+    @Transactional
     public boolean validerCode(String email, String code) {
-        // Récupérer l'utilisateur (uniquement non supprimé)
-        Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findByEmailAndDeletedFalse(email);
-        if (utilisateurOpt.isEmpty()) {
-            log.warn("Utilisateur non trouvé ou supprimé pour l'email : {}", email);
+
+        Utilisateur utilisateur = utilisateurService.getUtilisateurByEmail(email);
+
+        Instant now = Instant.now();
+
+        Optional<CodeValidation> codeValide =
+                codeValidationRepository.findByCodeAndUtilisateurAndUtiliseFalseAndDateExpirationAfter(
+                        code,
+                        utilisateur,
+                        now
+                );
+
+        if (codeValide.isEmpty()) {
+            log.warn("Code invalide ou expiré pour {}", email);
             return false;
         }
 
-        Utilisateur utilisateur = utilisateurOpt.get();
+        CodeValidation validation = codeValide.get();
+        validation.setUtilise(true);
+        codeValidationRepository.save(validation);
 
-        // Récupérer le code de validation
-        Optional<CodeValidation> codeValidationOpt = codeValidationRepository
-                .findByCodeAndUtilisateur(code, utilisateur);
-
-        if (codeValidationOpt.isEmpty()) {
-            log.warn("Code de validation non trouvé pour l'utilisateur : {}", email);
-            return false;
-        }
-
-        CodeValidation codeValidation = codeValidationOpt.get();
-
-        // Vérifier si le code est valide
-        if (!codeValidation.isValide()) {
-            log.warn("Code de validation expiré ou déjà utilisé pour : {}", email);
-            return false;
-        }
-
-        // Marquer le code comme utilisé
-        codeValidation.setUtilise(true);
-        codeValidationRepository.save(codeValidation);
-
-        // Activer le compte utilisateur
         utilisateur.setActif(true);
         utilisateurRepository.save(utilisateur);
 
-        log.info("Compte activé avec succès pour : {}", email);
+        log.info("Utilisateur {} activé avec succès", email);
         return true;
     }
 
+
     /**
-     * Renvoie un code de validation (si l'ancien est expiré ou utilisé)
+     * Suppression automatique des codes expirés
      */
-    public void renvoyerCode(String email) {
-        Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findByEmail(email);
-        if (utilisateurOpt.isEmpty()) {
-            throw new RuntimeException("Utilisateur non trouvé");
+    @Transactional
+    public void supprimerCodesExpires() {
+        
+        List<CodeValidation> expires =
+                codeValidationRepository.findAll().stream()
+                        .filter(CodeValidation::isExpired)
+                        .filter(c -> !c.isUtilise())
+                        .toList();
+
+        if (!expires.isEmpty()) {
+            codeValidationRepository.deleteAll(expires);
+            log.info("{} codes expirés supprimés", expires.size());
         }
-
-        Utilisateur utilisateur = utilisateurOpt.get();
-
-        // Vérifier si le compte est déjà activé
-        if (Boolean.TRUE.equals(utilisateur.getActif())) {
-            throw new RuntimeException("Le compte est déjà activé");
-        }
-
-        // Créer et envoyer un nouveau code
-        creerEtEnvoyerCode(utilisateur);
     }
 }
