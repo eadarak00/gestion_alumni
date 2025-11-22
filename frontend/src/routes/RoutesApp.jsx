@@ -1,13 +1,21 @@
 import React from 'react';
 import InscriptionEtudiant from '../fonctionnalites/etudiant/pages/InscriptionEtudiant';
+import ConnexionEtudiant from '../fonctionnalites/etudiant/pages/ConnexionEtudiant';
+import ConditionsUtilisation from '../fonctionnalites/etudiant/pages/ConditionsUtilisation';
 
 const RoutesApp = () => {
-  const pathname = window.location.pathname;
+  const pathname = globalThis.location.pathname;
 
   if (pathname === '/' || pathname === '/inscription') {
     return <InscriptionEtudiant />;
   }
-
+  if (pathname === '/connexion') {
+    return <ConnexionEtudiant />;
+  }
+  if (pathname === '/ConditionsUtilisation') {
+    return <ConditionsUtilisation />;
+  }
+ 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">

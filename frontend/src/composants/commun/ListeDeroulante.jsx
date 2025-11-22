@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ChevronDown } from 'lucide-react';
 
 const ListeDeroulante = ({
@@ -45,6 +46,23 @@ const ListeDeroulante = ({
       {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
+};
+
+ListeDeroulante.propTypes = {
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  name: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      label: PropTypes.node.isRequired,
+    })
+  ),
+  placeholder: PropTypes.string,
+  error: PropTypes.string,
+  required: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default ListeDeroulante;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import ChampTexte from '../commun/ChampTexte';
 import ChampMotDePasse from '../commun/ChampMotDePasse';
 import ListeDeroulante from '../commun/ListeDeroulante';
@@ -40,7 +41,7 @@ const FormulaireInscriptionEtudiant = ({ onSuccess }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => { 
     e.preventDefault();
     const resultat = await soumettre(formData);
 
@@ -62,9 +63,11 @@ const FormulaireInscriptionEtudiant = ({ onSuccess }) => {
       {/* TITRE */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Bienvenue dans votre <span className="text-emerald-600">Espace étudiant</span>
+          Bienvenue dans votre
+          {' '}
+          <span className="text-emerald-600">Espace étudiant</span>
         </h1>
-        <p className="text-gray-600 text-sm">
+        <p className="text-gray-600 text-sm text-center">
           Renseignez vos informations pour rejoindre notre communauté.
         </p>
       </div>
@@ -209,8 +212,9 @@ const FormulaireInscriptionEtudiant = ({ onSuccess }) => {
           onChange={handleChange}
           label={
             <span>
-              J'accepte les{' '}
-              <a href="/conditions" className="text-emerald-600 hover:underline">
+              J'accepte les
+              {' '}
+              <a href="/ConditionsUtilisation" className="text-emerald-600 hover:underline">
                 conditions d'utilisation
               </a>
             </span>
@@ -238,7 +242,8 @@ const FormulaireInscriptionEtudiant = ({ onSuccess }) => {
         </Bouton>
 
         <p className="text-center text-sm text-gray-600">
-          Vous avez déjà un compte ?{' '}
+          Vous avez déjà un compte ?
+          {' '}
           <a href="/connexion" className="text-emerald-600 hover:underline font-medium">
             Connectez-vous
           </a>
@@ -248,4 +253,8 @@ const FormulaireInscriptionEtudiant = ({ onSuccess }) => {
   );
 };
 
-export default FormulaireInscriptionEtudiant;
+FormulaireInscriptionEtudiant.propTypes = {
+  onSuccess: PropTypes.func.isRequired,
+};
+
+export default FormulaireInscriptionEtudiant; 
