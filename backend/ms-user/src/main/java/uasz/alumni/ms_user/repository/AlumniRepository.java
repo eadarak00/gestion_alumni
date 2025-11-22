@@ -6,13 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import uasz.alumni.ms_user.model.Alumni;
-import uasz.alumni.ms_user.model.Etudiant;
 
 @Repository
 public interface AlumniRepository extends JpaRepository<Alumni, Long> {
     // Cherche un alumni par email
-    Optional<Etudiant> findByEmail(String email);
+    Optional<Alumni> findByEmail(String email);
 
     // Cherche un alumni par username
-    Optional<Etudiant> findByUsername(String username);
+    Optional<Alumni> findByUsername(String username);
 }

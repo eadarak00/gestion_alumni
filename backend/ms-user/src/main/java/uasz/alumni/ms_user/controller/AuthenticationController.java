@@ -23,7 +23,7 @@ import uasz.alumni.ms_user.service.EtudiantService;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Inscription", description = "Endpoints pour l'inscription des étudiants")
+@Tag(name = "Inscription Étudiant", description = "Endpoints pour l'inscription des étudiants")
 public class AuthenticationController {
 
     private final EtudiantService etudiantService;
@@ -39,14 +39,14 @@ public class AuthenticationController {
                 .body(etudiantService.inscrireEtudiant(dto));
     }
 
-    @Operation(summary = "Inscrire un nouvel alumni", description = "Crée un nouveau compte alumni.")
-    @ApiResponse(responseCode = "201", description = "Alumni inscrit avec succès", content = @Content(mediaType = "application/json", schema = @Schema(implementation = EtudiantResponseDTO.class)))
     @PostMapping("/inscription-alumni")
-    public ResponseEntity<AlumniResponseDTO> inscrireAlumni(
+    public ResponseEntity<AlumniResponseDTO> inscrireEtudiant(
             @Valid @RequestBody AlumniRequestDTO dto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(alumniService.inscrireAlumni(dto));
     }
+    
+
 
 }

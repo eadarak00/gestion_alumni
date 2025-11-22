@@ -44,9 +44,7 @@ public class AlumniService {
         Alumni alumni = alumniMapper.toEntity(dto);
         alumni.setRole(roleAlumni);
         alumni.setActif(false);
-
-
-
+        
         // Hash du mot de passe
         alumni.setMotDePasse(passwordEncoder.encode(alumni.getMotDePasse()));
 
