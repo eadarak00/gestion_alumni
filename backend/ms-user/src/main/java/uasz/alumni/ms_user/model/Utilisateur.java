@@ -29,7 +29,6 @@ import uasz.alumni.ms_user.common.entity.BaseEntity;
 @Schema(description = "Entité représentant un utilisateur de la plateforme UASZ Alumni")
 public class Utilisateur extends BaseEntity {
 
-    @NotBlank(message = "Le nom est obligatoire")
     @Schema(
         description = "Nom de famille de l'utilisateur",
         example = "DIOP",
@@ -39,7 +38,6 @@ public class Utilisateur extends BaseEntity {
     )
     private String nom;
 
-    @NotBlank(message = "Le prénom est obligatoire")
     @Schema(
         description = "Prénom de l'utilisateur",
         example = "Marie",
@@ -51,7 +49,6 @@ public class Utilisateur extends BaseEntity {
 
     @Column(nullable = false)
     @Email(message = "Email invalide")
-    @NotBlank(message = "L'email est obligatoire")
     @Schema(
         description = "Adresse email unique de l'utilisateur",
         example = "marie.diop@alumni-uaszi.sn",
@@ -61,7 +58,6 @@ public class Utilisateur extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
-    @NotBlank(message = "Le mot de passe est obligatoire")
     @Schema(
         description = "Mot de passe hashé de l'utilisateur",
         example = "$2a$10$xyz123...",

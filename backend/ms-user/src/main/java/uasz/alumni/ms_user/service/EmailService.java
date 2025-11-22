@@ -52,7 +52,7 @@ public class EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
         try {
-            helper.setFrom(new InternetAddress("djibyf573@gmail.com", "Service CampusLoc"));
+            helper.setFrom(new InternetAddress("djibyf573@gmail.com", "Service de Gestion Alumni"));
         } catch (UnsupportedEncodingException e) {
             helper.setFrom("djibyf573@gmail.com"); // fallback sans nom
         }

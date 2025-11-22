@@ -21,8 +21,7 @@ import lombok.ToString;
 @Schema(description = "Entité représentant un étudiant de l'UASZ")
 public class Etudiant extends Utilisateur {
 
-    @Column(unique = true, nullable = false)
-    @NotBlank(message = "Le numéro de carte étudiant est obligatoire")
+    @Column(unique = true)
     @Schema(
         description = "Numéro unique de la carte étudiante",
         example = "20240001",
@@ -33,7 +32,6 @@ public class Etudiant extends Utilisateur {
     )
     private String numeroCarteEtudiant;
 
-    @NotBlank(message = "Le niveau est obligatoire")
     @Schema(
         description = "Niveau d'étude de l'étudiant",
         example = "LICENCE 3",
@@ -46,7 +44,6 @@ public class Etudiant extends Utilisateur {
     )
     private String niveau;
 
-    @NotBlank(message = "La filière est obligatoire")
     @Schema(
         description = "Filière d'étude de l'étudiant",
         example = "INFORMATIQUE",
