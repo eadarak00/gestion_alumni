@@ -21,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    // private final JwtAuthenticationFilter jwtFilter;
-    // private final UtilisateurDetailsService utilisateurDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,23 +51,5 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // // Bean requis pour injecter AuthenticationManager
-    // @Bean
-    // public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-    //     return config.getAuthenticationManager();
-    // }
 
-    // @Bean
-    // public WebMvcConfigurer corsConfigurer() {
-    //     return new WebMvcConfigurer() {
-    //         @Override
-    //         public void addCorsMappings(CorsRegistry registry) {
-    //             registry.addMapping("/api/uploads/**")
-    //                     .allowedOrigins("*")
-    //                     .allowedMethods("GET", "OPTIONS")
-    //                     .allowedHeaders("*")
-    //                     .exposedHeaders("Content-Disposition");
-    //         }
-    //     };
-    // }
 }
