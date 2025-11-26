@@ -98,6 +98,7 @@ services:
       retries: 10
       start_period: 40s
 
+
   # MS-CV Database
   ms-cv-db:
     image: mariadb:11
@@ -106,19 +107,21 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_cv
       MYSQL_USER: cvuser
-      MYSQL_PASSWORD: cvpass123
+      MYSQL_PASSWORD: passer123
     ports:
       - "3309:3306"
     networks:
       - microservices-net
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "cvuser", "-p cvpass123"]
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
-      timeout: 30s
+      timeout: 30s  # Augmenter le timeout
       retries: 20
       start_period: 60s
-
+    command: 
+      - --wait-timeout=28800
+      - --interactive-timeout=28800
 
   # MS-CV
   ms-cv:
@@ -140,7 +143,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 40s
-
   
   # FRONTEND REACT + VITE 
   frontend:
