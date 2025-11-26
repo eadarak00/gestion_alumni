@@ -27,7 +27,7 @@
 
         <!-- Dependency versions -->
         <springdoc.version>1.7.0</springdoc.version>
-        <spring-cloud.version>2025.0.0</spring-cloud.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
         <mariadb.version>3.1.4</mariadb.version>
     </properties>
 
