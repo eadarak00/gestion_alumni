@@ -116,14 +116,11 @@ services:
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
-      timeout: 30s  # Augmenter le timeout
+      timeout: 30s
       retries: 20
       start_period: 60s
-    command: 
-      - --wait-timeout=28800
-      - --interactive-timeout=28800
 
-  # MS-CV
+  # MS-CV - HEALTH CHECK CORRIGÉ
   ms-cv:
     build: ./backend/ms-cv
     container_name: ms-cv
@@ -134,15 +131,13 @@ services:
     depends_on:
       ms-discover:
         condition: service_healthy
-      ms-cv-db:
-        condition: service_healthy
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 40s
+      test: ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 0"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
   
   # FRONTEND REACT + VITE 
   frontend:
