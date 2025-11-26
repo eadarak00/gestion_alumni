@@ -2,7 +2,24 @@ server:
   port: 8082
 
 spring:
+  application:
+    name: ms-user
+  config:
+    import: "configserver:http://ms-config:8888"
   jackson:
     date-format: org.openapitools.RFC3339DateFormat
     serialization:
       "[WRITE_DATES_AS_TIMESTAMPS]": false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://ms-discover:8761/eureka
+
+springdoc:
+  api-docs:
+    path: /ms-cv/api-docs 
+    enabled: true
+  swagger-ui:
+    path: /ms-cv/swagger-ui.html
+    enabled: true
