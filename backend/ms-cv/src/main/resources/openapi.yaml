@@ -1,0 +1,1185 @@
+openapi: 3.0.3
+info:
+  description: API de gestion des CV des alumni et étudiants - Génération de CV standardisés
+  title: CV Service API
+  version: 1.0.0
+servers:
+- url: http://localhost:8082/api/v1/cv
+paths:
+  /cv:
+    get:
+      parameters:
+      - description: Filtrer par utilisateur
+        explode: true
+        in: query
+        name: utilisateurId
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/CV"
+                type: array
+          description: OK
+      summary: Liste des CV
+      tags:
+      - CV
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+    post:
+      description: "L'utilisateur remplit les champs, le système génère le CV standardisé"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CVCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CV"
+          description: CV créé avec succès
+        "400":
+          description: Données invalides
+      summary: Créer un CV (remplissage de formulaire)
+      tags:
+      - CV
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+  /cv/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: CV supprimé
+        "404":
+          description: CV non trouvé
+      summary: Supprimer un CV
+      tags:
+      - CV
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CV"
+          description: OK
+        "404":
+          description: CV non trouvé
+      summary: Récupérer un CV par ID
+      tags:
+      - CV
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+    put:
+      description: Modification des informations du CV
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CVCreate"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CV"
+          description: CV mis à jour
+        "404":
+          description: CV non trouvé
+      summary: Mettre à jour un CV
+      tags:
+      - CV
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+  /cv/utilisateur/{utilisateurId}:
+    get:
+      parameters:
+      - explode: false
+        in: path
+        name: utilisateurId
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CV"
+          description: OK
+        "404":
+          description: CV non trouvé pour cet utilisateur
+      summary: Récupérer le CV d'un utilisateur
+      tags:
+      - CV
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: CV
+  /cv/{id}/generer-pdf:
+    get:
+      description: Génère un PDF du CV avec le template UASZ
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - description: Template de CV à utiliser
+        explode: true
+        in: query
+        name: template
+        required: false
+        schema:
+          default: MODERNE
+          enum:
+          - MODERNE
+          - CLASSIQUE
+          - PROFESSIONNEL
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/pdf:
+              schema:
+                format: binary
+                type: string
+          description: PDF généré avec succès
+        "404":
+          description: CV non trouvé
+      summary: Générer le CV en PDF standardisé
+      tags:
+      - Génération CV
+      x-accepts:
+      - application/pdf
+      x-tags:
+      - tag: Génération CV
+  /cv/{id}/previsualiser:
+    get:
+      description: Génère une prévisualisation HTML du CV
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: template
+        required: false
+        schema:
+          default: MODERNE
+          enum:
+          - MODERNE
+          - CLASSIQUE
+          - PROFESSIONNEL
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            text/html:
+              schema:
+                type: string
+          description: Prévisualisation générée
+        "404":
+          description: CV non trouvé
+      summary: Prévisualiser le CV avant génération
+      tags:
+      - Génération CV
+      x-accepts:
+      - text/html
+      x-tags:
+      - tag: Génération CV
+  /experiences:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+          description: Expérience ajoutée
+        "400":
+          description: Données invalides
+      summary: Ajouter une expérience professionnelle
+      tags:
+      - Expériences
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Expériences
+  /experiences/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Expérience supprimée
+      summary: Supprimer une expérience
+      tags:
+      - Expériences
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Expériences
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceCreate"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+          description: Expérience mise à jour
+      summary: Modifier une expérience
+      tags:
+      - Expériences
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Expériences
+  /formations:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormationCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Formation"
+          description: Formation ajoutée
+        "400":
+          description: Données invalides
+      summary: Ajouter une formation
+      tags:
+      - Formations
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Formations
+  /formations/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Formation supprimée
+      summary: Supprimer une formation
+      tags:
+      - Formations
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Formations
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormationCreate"
+        required: true
+      responses:
+        "200":
+          description: Formation mise à jour
+      summary: Modifier une formation
+      tags:
+      - Formations
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Formations
+  /competences:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompetenceCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Competence"
+          description: Compétence ajoutée
+      summary: Ajouter une compétence
+      tags:
+      - Compétences
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Compétences
+  /competences/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Compétence supprimée
+      summary: Supprimer une compétence
+      tags:
+      - Compétences
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Compétences
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompetenceCreate"
+        required: true
+      responses:
+        "200":
+          description: Compétence mise à jour
+      summary: Modifier une compétence
+      tags:
+      - Compétences
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Compétences
+  /langues:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LangueCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Langue"
+          description: Langue ajoutée
+      summary: Ajouter une langue
+      tags:
+      - Langues
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Langues
+  /langues/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Langue supprimée
+      summary: Supprimer une langue
+      tags:
+      - Langues
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Langues
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LangueCreate"
+        required: true
+      responses:
+        "200":
+          description: Langue mise à jour
+      summary: Modifier une langue
+      tags:
+      - Langues
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Langues
+  /certifications:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificationCreate"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certification"
+          description: Certification ajoutée
+      summary: Ajouter une certification
+      tags:
+      - Certifications
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Certifications
+  /certifications/{id}:
+    delete:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Certification supprimée
+      summary: Supprimer une certification
+      tags:
+      - Certifications
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Certifications
+    put:
+      parameters:
+      - explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificationCreate"
+        required: true
+      responses:
+        "200":
+          description: Certification mise à jour
+      summary: Modifier une certification
+      tags:
+      - Certifications
+      x-content-type: application/json
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Certifications
+  /templates:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/Template"
+                type: array
+          description: OK
+      summary: Liste des templates de CV disponibles
+      tags:
+      - Templates
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: Templates
+components:
+  schemas:
+    CV:
+      example:
+        resume: Développeur passionné avec 5 ans d'expérience...
+        github: https://github.com/johndoe
+        dateCreation: 2000-01-23T04:56:07.000+00:00
+        titre: Ingénieur Full Stack
+        dateModification: 2000-01-23T04:56:07.000+00:00
+        utilisateurId: 1
+        photo: https://storage.uasz.sn/photos/user1.jpg
+        telephone: +221 77 123 45 67
+        templateUtilise: MODERNE
+        linkedin: https://linkedin.com/in/johndoe
+        certifications:
+        - cvId: 1
+          lienCredential: https://aws.amazon.com/verification/12345
+          dateExpiration: 2025-03-15
+          organisme: Amazon Web Services
+          dateObtention: 2022-03-15
+          id: 1
+          nom: AWS Certified Developer
+        - cvId: 1
+          lienCredential: https://aws.amazon.com/verification/12345
+          dateExpiration: 2025-03-15
+          organisme: Amazon Web Services
+          dateObtention: 2022-03-15
+          id: 1
+          nom: AWS Certified Developer
+        experiences:
+        - cvId: 1
+          entreprise: Tech Company
+          dateDebut: 2020-01-15
+          localisation: "Dakar, Sénégal"
+          description: |-
+            - Développement d'applications web
+            - Gestion de bases de données
+          id: 1
+          poste: Développeur Full Stack
+          dateFin: 2023-06-30
+          enCours: false
+        - cvId: 1
+          entreprise: Tech Company
+          dateDebut: 2020-01-15
+          localisation: "Dakar, Sénégal"
+          description: |-
+            - Développement d'applications web
+            - Gestion de bases de données
+          id: 1
+          poste: Développeur Full Stack
+          dateFin: 2023-06-30
+          enCours: false
+        competences:
+        - cvId: 1
+          categorie: Langage de programmation
+          id: 1
+          nom: Java
+          niveau: AVANCE
+        - cvId: 1
+          categorie: Langage de programmation
+          id: 1
+          nom: Java
+          niveau: AVANCE
+        langues:
+        - cvId: 1
+          id: 1
+          nom: Français
+          niveau: LANGUE_MATERNELLE
+        - cvId: 1
+          id: 1
+          nom: Français
+          niveau: LANGUE_MATERNELLE
+        formations:
+        - cvId: 1
+          dateDebut: 2015-10-01
+          localisation: "Ziguinchor, Sénégal"
+          description: Formation en développement logiciel
+          etablissement: UASZ
+          id: 1
+          dateFin: 2018-07-30
+          diplome: Licence en Informatique
+          enCours: false
+        - cvId: 1
+          dateDebut: 2015-10-01
+          localisation: "Ziguinchor, Sénégal"
+          description: Formation en développement logiciel
+          etablissement: UASZ
+          id: 1
+          dateFin: 2018-07-30
+          diplome: Licence en Informatique
+          enCours: false
+        portfolio: https://johndoe.com
+        adresse: "Dakar, Sénégal"
+        id: 1
+        email: john.doe@uasz.sn
+      properties:
+        id:
+          example: 1
+          type: integer
+        utilisateurId:
+          example: 1
+          type: integer
+        titre:
+          example: Ingénieur Full Stack
+          type: string
+        resume:
+          example: Développeur passionné avec 5 ans d'expérience...
+          type: string
+        photo:
+          description: URL de la photo de profil
+          example: https://storage.uasz.sn/photos/user1.jpg
+          type: string
+        linkedin:
+          example: https://linkedin.com/in/johndoe
+          type: string
+        github:
+          example: https://github.com/johndoe
+          type: string
+        portfolio:
+          example: https://johndoe.com
+          type: string
+        telephone:
+          example: +221 77 123 45 67
+          type: string
+        email:
+          example: john.doe@uasz.sn
+          type: string
+        adresse:
+          example: "Dakar, Sénégal"
+          type: string
+        experiences:
+          items:
+            $ref: "#/components/schemas/Experience"
+          type: array
+        formations:
+          items:
+            $ref: "#/components/schemas/Formation"
+          type: array
+        competences:
+          items:
+            $ref: "#/components/schemas/Competence"
+          type: array
+        langues:
+          items:
+            $ref: "#/components/schemas/Langue"
+          type: array
+        certifications:
+          items:
+            $ref: "#/components/schemas/Certification"
+          type: array
+        templateUtilise:
+          enum:
+          - MODERNE
+          - CLASSIQUE
+          - PROFESSIONNEL
+          example: MODERNE
+          type: string
+        dateCreation:
+          format: date-time
+          type: string
+        dateModification:
+          format: date-time
+          type: string
+      type: object
+    CVCreate:
+      example:
+        resume: Développeur passionné...
+        github: github
+        portfolio: portfolio
+        titre: Ingénieur Full Stack
+        adresse: "Dakar, Sénégal"
+        utilisateurId: 1
+        photo: photo
+        telephone: +221 77 123 45 67
+        templateUtilise: MODERNE
+        linkedin: linkedin
+        email: john.doe@uasz.sn
+      properties:
+        utilisateurId:
+          example: 1
+          type: integer
+        titre:
+          example: Ingénieur Full Stack
+          type: string
+        resume:
+          example: Développeur passionné...
+          type: string
+        photo:
+          description: URL de la photo
+          type: string
+        linkedin:
+          type: string
+        github:
+          type: string
+        portfolio:
+          type: string
+        telephone:
+          example: +221 77 123 45 67
+          type: string
+        email:
+          example: john.doe@uasz.sn
+          type: string
+        adresse:
+          example: "Dakar, Sénégal"
+          type: string
+        templateUtilise:
+          default: MODERNE
+          enum:
+          - MODERNE
+          - CLASSIQUE
+          - PROFESSIONNEL
+          type: string
+      required:
+      - email
+      - telephone
+      - titre
+      - utilisateurId
+      type: object
+    Experience:
+      example:
+        cvId: 1
+        entreprise: Tech Company
+        dateDebut: 2020-01-15
+        localisation: "Dakar, Sénégal"
+        description: |-
+          - Développement d'applications web
+          - Gestion de bases de données
+        id: 1
+        poste: Développeur Full Stack
+        dateFin: 2023-06-30
+        enCours: false
+      properties:
+        id:
+          example: 1
+          type: integer
+        cvId:
+          example: 1
+          type: integer
+        poste:
+          example: Développeur Full Stack
+          type: string
+        entreprise:
+          example: Tech Company
+          type: string
+        localisation:
+          example: "Dakar, Sénégal"
+          type: string
+        dateDebut:
+          example: 2020-01-15
+          format: date
+          type: string
+        dateFin:
+          example: 2023-06-30
+          format: date
+          type: string
+        enCours:
+          example: false
+          type: boolean
+        description:
+          example: |-
+            - Développement d'applications web
+            - Gestion de bases de données
+          type: string
+      type: object
+    ExperienceCreate:
+      example:
+        cvId: 0
+        entreprise: entreprise
+        dateDebut: 2000-01-23
+        localisation: localisation
+        description: description
+        poste: poste
+        dateFin: 2000-01-23
+        enCours: false
+      properties:
+        cvId:
+          type: integer
+        poste:
+          type: string
+        entreprise:
+          type: string
+        localisation:
+          type: string
+        dateDebut:
+          format: date
+          type: string
+        dateFin:
+          format: date
+          type: string
+        enCours:
+          default: false
+          type: boolean
+        description:
+          type: string
+      required:
+      - cvId
+      - dateDebut
+      - entreprise
+      - poste
+      type: object
+    Formation:
+      example:
+        cvId: 1
+        dateDebut: 2015-10-01
+        localisation: "Ziguinchor, Sénégal"
+        description: Formation en développement logiciel
+        etablissement: UASZ
+        id: 1
+        dateFin: 2018-07-30
+        diplome: Licence en Informatique
+        enCours: false
+      properties:
+        id:
+          example: 1
+          type: integer
+        cvId:
+          example: 1
+          type: integer
+        diplome:
+          example: Licence en Informatique
+          type: string
+        etablissement:
+          example: UASZ
+          type: string
+        localisation:
+          example: "Ziguinchor, Sénégal"
+          type: string
+        dateDebut:
+          example: 2015-10-01
+          format: date
+          type: string
+        dateFin:
+          example: 2018-07-30
+          format: date
+          type: string
+        enCours:
+          example: false
+          type: boolean
+        description:
+          example: Formation en développement logiciel
+          type: string
+      type: object
+    FormationCreate:
+      example:
+        cvId: 0
+        dateDebut: 2000-01-23
+        localisation: localisation
+        description: description
+        etablissement: etablissement
+        dateFin: 2000-01-23
+        diplome: diplome
+        enCours: false
+      properties:
+        cvId:
+          type: integer
+        diplome:
+          type: string
+        etablissement:
+          type: string
+        localisation:
+          type: string
+        dateDebut:
+          format: date
+          type: string
+        dateFin:
+          format: date
+          type: string
+        enCours:
+          default: false
+          type: boolean
+        description:
+          type: string
+      required:
+      - cvId
+      - dateDebut
+      - diplome
+      - etablissement
+      type: object
+    Competence:
+      example:
+        cvId: 1
+        categorie: Langage de programmation
+        id: 1
+        nom: Java
+        niveau: AVANCE
+      properties:
+        id:
+          example: 1
+          type: integer
+        cvId:
+          example: 1
+          type: integer
+        nom:
+          example: Java
+          type: string
+        niveau:
+          enum:
+          - DEBUTANT
+          - INTERMEDIAIRE
+          - AVANCE
+          - EXPERT
+          example: AVANCE
+          type: string
+        categorie:
+          example: Langage de programmation
+          type: string
+      type: object
+    CompetenceCreate:
+      example:
+        cvId: 0
+        categorie: categorie
+        nom: nom
+        niveau: INTERMEDIAIRE
+      properties:
+        cvId:
+          type: integer
+        nom:
+          type: string
+        niveau:
+          default: INTERMEDIAIRE
+          enum:
+          - DEBUTANT
+          - INTERMEDIAIRE
+          - AVANCE
+          - EXPERT
+          type: string
+        categorie:
+          type: string
+      required:
+      - cvId
+      - nom
+      type: object
+    Langue:
+      example:
+        cvId: 1
+        id: 1
+        nom: Français
+        niveau: LANGUE_MATERNELLE
+      properties:
+        id:
+          example: 1
+          type: integer
+        cvId:
+          example: 1
+          type: integer
+        nom:
+          example: Français
+          type: string
+        niveau:
+          enum:
+          - DEBUTANT
+          - INTERMEDIAIRE
+          - AVANCE
+          - COURANT
+          - LANGUE_MATERNELLE
+          example: LANGUE_MATERNELLE
+          type: string
+      type: object
+    LangueCreate:
+      example:
+        cvId: 0
+        nom: nom
+        niveau: DEBUTANT
+      properties:
+        cvId:
+          type: integer
+        nom:
+          type: string
+        niveau:
+          enum:
+          - DEBUTANT
+          - INTERMEDIAIRE
+          - AVANCE
+          - COURANT
+          - LANGUE_MATERNELLE
+          type: string
+      required:
+      - cvId
+      - niveau
+      - nom
+      type: object
+    Certification:
+      example:
+        cvId: 1
+        lienCredential: https://aws.amazon.com/verification/12345
+        dateExpiration: 2025-03-15
+        organisme: Amazon Web Services
+        dateObtention: 2022-03-15
+        id: 1
+        nom: AWS Certified Developer
+      properties:
+        id:
+          example: 1
+          type: integer
+        cvId:
+          example: 1
+          type: integer
+        nom:
+          example: AWS Certified Developer
+          type: string
+        organisme:
+          example: Amazon Web Services
+          type: string
+        dateObtention:
+          example: 2022-03-15
+          format: date
+          type: string
+        dateExpiration:
+          example: 2025-03-15
+          format: date
+          type: string
+        lienCredential:
+          example: https://aws.amazon.com/verification/12345
+          type: string
+      type: object
+    CertificationCreate:
+      example:
+        cvId: 0
+        lienCredential: lienCredential
+        dateExpiration: 2000-01-23
+        organisme: organisme
+        dateObtention: 2000-01-23
+        nom: nom
+      properties:
+        cvId:
+          type: integer
+        nom:
+          type: string
+        organisme:
+          type: string
+        dateObtention:
+          format: date
+          type: string
+        dateExpiration:
+          format: date
+          type: string
+        lienCredential:
+          type: string
+      required:
+      - cvId
+      - nom
+      - organisme
+      type: object
+    Template:
+      example:
+        apercu: https://storage.uasz.sn/templates/moderne-preview.png
+        description: Design moderne avec sections colorées
+        id: MODERNE
+        nom: Moderne
+      properties:
+        id:
+          enum:
+          - MODERNE
+          - CLASSIQUE
+          - PROFESSIONNEL
+          example: MODERNE
+          type: string
+        nom:
+          example: Moderne
+          type: string
+        description:
+          example: Design moderne avec sections colorées
+          type: string
+        apercu:
+          description: URL de l'image d'aperçu
+          example: https://storage.uasz.sn/templates/moderne-preview.png
+          type: string
+      type: object

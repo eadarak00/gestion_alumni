@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * CertificationCreate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-26T15:28:11.703869118Z[Africa/Dakar]", comments = "Generator version: 7.17.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2025-11-26T19:36:29.996620853Z[Africa/Dakar]", comments = "Generator version: 7.17.0")
 public class CertificationCreate {
 
   private Integer cvId;

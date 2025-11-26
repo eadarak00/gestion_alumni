@@ -5,7 +5,25 @@
   "packageName": "uasz.alumni.ms-cv",
   "apiPackage": "uasz.alumni.ms-cv.controllers",
   "modelPackage": "uasz.alumni.ms-cv.models",
-  "generateSupportingFiles": false,
-  "interfaceOnly": true,
-  "useTags": true
+  "generateSupportingFiles": true,
+  "interfaceOnly": false,
+  "useTags": true,
+  "configOptions": {
+    "basePackage": "uasz.alumni.ms-cv",
+    "configPackage": "uasz.alumni.ms-cv.config",
+    "repositoryPackage": "uasz.alumni.ms-cv.repositories",
+    "servicePackage": "uasz.alumni.ms-cv.services",
+    "implPackage": "uasz.alumni.ms-cv.services.impl",
+    "useSpringBoot3": true,
+    "useSpringAnnotation": true,
+    "java8": false,
+    "java17": true,
+    "dateLibrary": "java8",
+    "serializableModel": true,
+    "serializationLibrary": "jackson",
+    "library": "spring-boot",
+    "delegatePattern": false,
+    "title": "MS-CV Service",
+    "serverPort": "8082"
+  }
 }
