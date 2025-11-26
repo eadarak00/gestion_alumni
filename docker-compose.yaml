@@ -97,6 +97,49 @@ services:
       timeout: 5s
       retries: 10
       start_period: 40s
+
+  # MS-CV Database
+  ms-cv-db:
+    image: mariadb:11
+    container_name: ms-cv-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_cv
+      MYSQL_USER: cvuser
+      MYSQL_PASSWORD: cvpass123
+    ports:
+      - "3309:3306"
+    networks:
+      - microservices-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "cvuser", "-p cvpass123"]
+      interval: 10s
+      timeout: 30s
+      retries: 20
+      start_period: 60s
+
+  # MS-CV
+  ms-cv:
+    build: ./backend/ms-cv
+    container_name: ms-cv
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-net
+    depends_on:
+      ms-discover:
+        condition: service_healthy
+      ms-cv-db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+
   
   # FRONTEND REACT + VITE 
   frontend:
