@@ -1,0 +1,11 @@
+{
+  "generatorName": "spring",
+  "inputSpec": "./ms-cv.yaml",
+  "outputDir": "../backend/ms-cv",
+  "packageName": "uasz.alumni.ms-cv",
+  "apiPackage": "uasz.alumni.ms-cv.controllers",
+  "modelPackage": "uasz.alumni.ms-cv.models",
+  "generateSupportingFiles": false,
+  "interfaceOnly": true,
+  "useTags": true
+}
