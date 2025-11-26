@@ -34,8 +34,11 @@ app:
     from: ${EMAIL_FROM:noreply@alumni.uasz.sn}
     code-expiration-minutes: 15
 
+
 springdoc:
   api-docs:
+    path: /ms-user/api-docs 
     enabled: true
   swagger-ui:
+    path: /ms-user/swagger-ui.html
     enabled: true
