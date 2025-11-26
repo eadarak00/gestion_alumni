@@ -1,0 +1,36 @@
+{
+  "name": "Gestion Alumni - DevContainer",
+  "dockerComposeFile": [
+    "../docker-compose.yaml"
+  ],
+  "service": "frontend",
+  "runServices": [
+    "ms-config",
+    "ms-discover",
+    "ms-user-db",
+    "ms-cv-db",
+    "ms-user",
+    "ms-cv",
+    "ms-gateway",
+    "frontend"
+  ],
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "redhat.java",
+        "vscjava.vscode-java-pack",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "mhutchie.git-graph",
+        "eamodio.gitlens"
+      ]
+    }
+  },
+  "remoteUser": "vscode"
+}
