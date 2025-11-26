@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.Module;
 import org.openapitools.jackson.nullable.JsonNullableModule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-// import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
@@ -16,7 +16,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
     basePackages = {"org.openapitools", "uasz.alumni.ms_cv.controllers" , "org.openapitools.configuration", "uasz.alumni.ms_cv"},
     nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
-// @EnableDiscoveryClient
+@EnableDiscoveryClient
 public class MsCvApplication {
 
     public static void main(String[] args) {
