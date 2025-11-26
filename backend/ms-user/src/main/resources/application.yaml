@@ -23,19 +23,8 @@ spring:
           timeout: 5000
           writetimeout: 5000
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://ms-discover:8761/eureka
-
 # Configuration personnalisée pour l'application
 app:
   email:
     from: ${EMAIL_FROM:noreply@alumni.uasz.sn}
     code-expiration-minutes: 15
-
-springdoc:
-  api-docs:
-    enabled: true
-  swagger-ui:
-    enabled: true

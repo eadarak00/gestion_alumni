@@ -1,0 +1,13 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: ms-cv
+  config:
+    import: "configserver:http://ms-config:8888"
+  jackson:
+    date-format: org.openapitools.RFC3339DateFormat
+    serialization:
+      "[WRITE_DATES_AS_TIMESTAMPS]": false
+
