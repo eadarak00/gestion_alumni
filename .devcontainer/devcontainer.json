@@ -1,0 +1,41 @@
+{
+  "name": "Gestion Alumni - Docker-in-Docker",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    }
+  },
+
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "redhat.java",
+        "vscjava.vscode-java-pack",
+        "vscjava.vscode-maven",
+        "vmware.vscode-spring-boot",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "java.compile.nullAnalysis.mode": "automatic",
+        "java.configuration.updateBuildConfiguration": "automatic"
+      }
+    }
+  },
+
+  "forwardPorts": [
+    8081, 8082, 8083, 8088, 8761, 8888, 3000, 8080, 3308, 3309, 3310
+  ],
+
+  "postCreateCommand": "apt-get update && apt-get install -y openjdk-17-jdk maven nodejs npm && npm install -g yarn",
+
+  "remoteUser": "vscode"
+}

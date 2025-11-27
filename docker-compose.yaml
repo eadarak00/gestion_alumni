@@ -131,9 +131,54 @@ services:
     depends_on:
       ms-discover:
         condition: service_healthy
+      ms-cv-db:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 0"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+  
+
+  # MS- INVITATION Database
+  ms-invitation-db:
+    image: mariadb:11
+    container_name: ms-invitation-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_invitation
+      MYSQL_USER: inviteUser
+      MYSQL_PASSWORD: passer123
+    ports:
+      - "3310:3306"
+    networks:
+      - microservices-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 30s
+      retries: 20
+      start_period: 60s
+
+  # MS-INVITATION - HEALTH CHECK CORRIGÉ
+  ms-invitation:
+    build: ./backend/ms-invitation
+    container_name: ms-invitation
+    ports:
+      - "8083:8083"
+    networks:
+      - microservices-net
+    depends_on:
+      ms-discover:
+        condition: service_healthy
+      ms-invitation-db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8083/actuator/health || exit 0"]
       interval: 30s
       timeout: 10s
       retries: 3
